@@ -3,26 +3,20 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <title>Unity WebGL Player | {{{ PRODUCT_NAME }}}</title>
-        <link rel="stylesheet" href="TemplateData/style.css">
-        <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
+        <title>Klaytn NFT Transfer </title>
+        <link rel="stylesheet" href="./style.css">
+        <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/caver-js/1.8.2-rc.3/caver.min.js" integrity="sha512-MTE5dl6b2uJbZszWF5Mt2WDRJO7CGsUjFVv8xKm1svCO+KP3R/nk7krd31B9JkYtQXQi1OaZy9IrLtoNmhpeQg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     </head>
     <body>
-        <button class="enableEthereumButton">Enable Ethereum</button>
-
-        <script >
-            const ethereumButton = document.querySelector('.enableEthereumButton');
-            // const Web3 = import "web3");
-
-            ethereumButton.addEventListener('click', () => {
-            // //Will Start the metamask extension
-                if (window.web3) {
-                    window.web3 = new Web3(window.web3.currentProvider);
-                    window.ethereum.enable();
-                    return true;
-                }
-                return false;
-            });
-        </script>
+        <button class="button enableEthereumButton" id="connect">Connect Metamask</button> <p></p>
+        <div>
+            <p>Upload ABI File: <input type="file" id="fileUpload" accept=".abi" /></p>
+            <p>Contract Address: <input type="text" id="ContractAddress" size="20"></p>
+            <p>To address: <input type="text" id="ReceiverAddress" size="20"></p>
+            <p>Token ID: <input type="text" id="TokenID" size="20"> </p>
+            <button class="button sendNFTButton" id="sendnft">Send NFT</button>
+        </div>
+        <script src="web3/index.js"></script>
     </body>
 </html>

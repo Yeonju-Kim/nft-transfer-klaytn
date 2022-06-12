@@ -1,0 +1,39 @@
+div {
+    font-family: "paybooc-Light", sans-serif;
+    font-weight: 600;
+}
+
+input[type=text] {
+    width: 60%;
+    padding: 10px 30px;
+    margin: 8px 0;
+    box-sizing: border-box;
+}
+input[type=text]:focus {
+    /* border: 3px solid #555; */
+    background-color: lightblue;
+}
+
+.button {
+    position: relative;
+    border: none;
+    display: inline-block;
+    padding: 15px 30px;
+    border-radius: 15px;
+    font-family: "paybooc-Light", sans-serif;
+    /* box-shadow: 0 15px 15px rgba(0, 0, 0, 0.1); */
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.25s;
+    background-color: #77af9c;
+    color: white;
+}
+
+.button:hover{
+    background-color: #95bfb1; /* Green */
+
+}
+.button:disabled{
+    opacity: 0.6;
+    cursor: not-allowed;
+}
