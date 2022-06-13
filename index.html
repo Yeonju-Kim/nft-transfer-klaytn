@@ -9,12 +9,19 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/caver-js/1.8.2-rc.3/caver.min.js" integrity="sha512-MTE5dl6b2uJbZszWF5Mt2WDRJO7CGsUjFVv8xKm1svCO+KP3R/nk7krd31B9JkYtQXQi1OaZy9IrLtoNmhpeQg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     </head>
     <body>
-        <button class="button enableEthereumButton" id="connect">Connect Metamask</button> <p></p>
+        <button class="button enableEthereumButton" id="connect">Connect Metamask</button>
+        <p class="address" id="myAccountAddress"> </p>
         <div>
             <p>Upload ABI File: <input type="file" id="fileUpload" accept=".abi" /></p>
-            <p>Contract Address: <input type="text" id="ContractAddress"></p>
-            <p>To address: <input type="text" id="ReceiverAddress"></p>
+            <p>Contract Address: <input type="text" id="ContractAddress"> <button class="showNFT">Show NFTs</button></p>
+            <div id="NFTs" style="display: none;">
+                <img src="" id ="1"/>
+                <img src="" id ="2"/>
+                <img src="" id ="3"/>
+                <div style="transform: translate(28%, 0);"><button id="prev"> ◀</button> <button id="next">▶</button></div>
+            </div>
             <p>Token ID: <input type="text" id="TokenID"> </p>
+            <p>To address: <input type="text" id="ReceiverAddress"></p>
             <button class="button sendNFTButton" id="sendnft">Send NFT</button>
         </div>
         <script src="web3/index.js"></script>

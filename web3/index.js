@@ -2,8 +2,19 @@
 const ethereumButton = document.querySelector('.enableEthereumButton');
 const fileInput = document.getElementById("fileUpload");
 const sendNFTButton = document.querySelector('.sendNFTButton');
-let web3; 
+const showNFTButton = document.querySelector('.showNFT');
+const leftButton = document.getElementById('prev');
+const rightButton = document.getElementById('next');
+
+let web3;
 let JsonInterface = null; 
+let tokenIDlist;
+let page = 0;
+let totalBalance;
+const numOfNFTs = 3; 
+const caver = new Caver("https://public-node-api.klaytnapi.com/v1/cypress");
+let myAccount;
+
 // Chain ID of Cypress: 8217 
 
 ethereumButton.addEventListener('click', async () => {
@@ -21,19 +32,107 @@ ethereumButton.addEventListener('click', async () => {
                 console.log('Network is not added. ')
             }
         }
-        
+        myAccount = result[0];
+        document.getElementById('myAccountAddress').innerHTML =`Wallet Address: ${myAccount}`;
         web3 = new Web3(ethereum);
-        console.log(result)
     })
     .catch((error) => {
-      if (error.code === 4001) {
-        // EIP-1193 userRejectedRequest error
-        console.log('Please connect to MetaMask.');
-      } else {
-        console.error(error);
-      }
+        if (error.code === 4001) {
+            // EIP-1193 userRejectedRequest error
+            console.log('Please connect to MetaMask.');
+        } else {
+            console.error(error);
+        }
     });
 });
+
+function setEvents(){
+    for (let i = 0 ; i < numOfNFTs ; i++)
+    {
+        document.getElementById(`${i+1}`).addEventListener('click', ()=>{
+            document.getElementById('TokenID').value = tokenIDlist[i];
+        })
+    }
+    
+    leftButton.addEventListener('click', async()=>{
+        if (page == 0)
+        {
+            return;
+        }    
+        else{
+            page -= 1;
+            await updateNFTImage(page*numOfNFTs); 
+        }
+    })
+    rightButton.addEventListener('click', async()=>{
+        if ((page+1) * numOfNFTs >= totalBalance)
+        {
+            return;
+        }    
+        else{
+            page += 1;
+            await updateNFTImage(page*numOfNFTs); 
+        }
+    })
+}
+
+async function updateNFTImage(index){
+    const contractAddress = document.getElementById('ContractAddress').value;
+    if (contractAddress === "")
+    {
+        console.log('Address has not set yet.')
+        return;
+    }
+
+    if (JsonInterface === null)
+    {
+        console.log("Use kip17 jsonInterface.")
+        JsonInterface = await (new caver.kct.kip17()).options.jsonInterface;
+    }
+
+    const nftContract = new web3.eth.Contract(JsonInterface, contractAddress)
+    totalBalance = await nftContract.methods.balanceOf(myAccount).call({from: myAccount })
+
+    tokenIDlist = []
+    let tokenURIList = []
+    for (let i = 0; i < numOfNFTs ; i++)
+    {
+        if((i+index) < totalBalance)
+        {
+            tokenIDlist.push(await nftContract.methods.tokenOfOwnerByIndex(myAccount, i+index).call({from: myAccount}))
+            tokenURIList.push(await nftContract.methods.tokenURI(tokenIDlist[i]).call({from: myAccount}))
+        }
+    }
+
+    for (let i = 0 ; i < numOfNFTs ; i ++ )
+    {
+        if ((i + index) < totalBalance) 
+        {
+            document.getElementById(`${i+1}`).style.display="inline"
+            await fetch(tokenURIList[i])
+            .then(response => response.json())
+            .then((data) => {
+                document.getElementById(`${i+1}`).src= data.image;
+            });
+        }
+        else{
+            document.getElementById(`${i+1}`).style.display="none"
+        }
+    }
+}
+
+showNFTButton.addEventListener('click', async()=>{
+    const contractAddress = document.getElementById('ContractAddress').value;
+    if (contractAddress === "")
+    {
+        console.log('Address has not set yet.')
+        return;
+    }
+    document.getElementById('NFTs').style.display = "inline"
+    setEvents();
+    page = 0;
+    await updateNFTImage(page);
+})
 
 sendNFTButton.addEventListener('click', async() =>{
     const contractAddress = document.getElementById('ContractAddress').value;
@@ -46,7 +145,6 @@ sendNFTButton.addEventListener('click', async() =>{
         return; 
     }
     
-    console.log(contractAddress, tokenID, toAddress)
     await sendTransaction(contractAddress, toAddress, tokenID)
 })
 
@@ -61,25 +159,23 @@ fileInput.onchange = (event) => {
 };
 
 // Send Transaction to transfer NFT 
-async function sendTransaction(contractAddress,toAddress,tokenID) {
+async function sendTransaction(contractAddress, toAddress, tokenID) {
     if (web3 === undefined)
     {
         console.log('web3 is undefined!')
         return;
     }
     sendNFTButton.disabled = true; 
-    const caver = new Caver("https://public-node-api.klaytnapi.com/v1/cypress");    
     if (JsonInterface === null)
     {
         console.log("Use kip17 jsonInterface.")
         JsonInterface = await (new caver.kct.kip17()).options.jsonInterface;
     }
-
-    const accounts = await web3.eth.getAccounts()
-    const myAccount = accounts[0];
-    const nftContractReadonly = new web3.eth.Contract(JsonInterface, contractAddress).methods.safeTransferFrom(
+    
+    const nftContract = new web3.eth.Contract(JsonInterface, contractAddress)
+    await nftContract.methods.safeTransferFrom(
         myAccount, toAddress, tokenID 
-    ).send({from: myAccount, gasPrice: 250000000000})
+    ).send({from: myAccount, gasPrice: '250000000000'})
     .then((response)=>{
         console.log(response)
         sendNFTButton.disabled = false; 

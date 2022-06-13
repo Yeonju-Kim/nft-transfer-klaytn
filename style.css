@@ -1,8 +1,16 @@
 div {
     font-family: "paybooc-Light", sans-serif;
     font-weight: 600;
+    margin: 4px 0;
 }
 
+.address {
+    font-family: "paybooc-Light", sans-serif;
+    font-weight: 800;
+    margin: 10px 0;
+    color: seagreen;
+    font-size: 20px;
+}
 input[type=text] {
     width: 50%;
     padding: 10px 10px;
@@ -31,10 +39,17 @@ input[type=text]:focus {
 }
 
 .button:hover{
-    background-color: #95bfb1; /* Green */
-
+    opacity: 0.6;
 }
 .button:disabled{
     opacity: 0.6;
     cursor: not-allowed;
+}
+
+img{
+    width: 20%;
+}
+
+img:hover{
+    opacity: 0.6;
 }
