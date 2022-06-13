@@ -14,7 +14,6 @@ let totalBalance;
 const numOfNFTs = 3; 
 const caver = new Caver("https://public-node-api.klaytnapi.com/v1/cypress");
 let myAccount;
-
 // Chain ID of Cypress: 8217 
 
 ethereumButton.addEventListener('click', async () => {
@@ -178,10 +177,18 @@ async function sendTransaction(contractAddress, toAddress, tokenID) {
     ).send({from: myAccount, gasPrice: '250000000000'})
     .then((response)=>{
         console.log(response)
-        sendNFTButton.disabled = false; 
+        document.getElementById('transactionReceipt').innerHTML = 'Receipt is available!';
+        sendNFTButton.disabled = false;
     })
     .catch((err)=>{
         console.log(err)
-        sendNFTButton.disabled = false; 
+        document.getElementById('transactionReceipt').innerHTML = err.message;
+        sendNFTButton.disabled = false;
+
     })
+    page = 0;
+    document.getElementById('NFTs').style.display = "none";
+    setTimeout(() => {
+        document.getElementById('transactionReceipt').innerHTML = "";
+    }, 10000)
 }

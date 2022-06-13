@@ -13,7 +13,7 @@
         <p class="address" id="myAccountAddress"> </p>
         <div>
             <p>Upload ABI File: <input type="file" id="fileUpload" accept=".abi" /></p>
-            <p>Contract Address: <input type="text" id="ContractAddress"> <button class="showNFT">Show NFTs</button></p>
+            <p>Contract Address (default: KIP-17): <input type="text" id="ContractAddress"> <button class="showNFT">Show NFTs</button></p>
             <div id="NFTs" style="display: none;">
                 <img src="" id ="1"/>
                 <img src="" id ="2"/>
@@ -23,6 +23,7 @@
             <p>Token ID: <input type="text" id="TokenID"> </p>
             <p>To address: <input type="text" id="ReceiverAddress"></p>
             <button class="button sendNFTButton" id="sendnft">Send NFT</button>
+            <p class="receiptInfo" id="transactionReceipt"></p>
         </div>
         <script src="web3/index.js"></script>
     </body>
