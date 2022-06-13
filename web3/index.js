@@ -47,7 +47,7 @@ sendNFTButton.addEventListener('click', async() =>{
     }
     
     console.log(contractAddress, tokenID, toAddress)
-    await sendTransaction(contractAddress, toAddress, 1965466615)
+    await sendTransaction(contractAddress, toAddress, tokenID)
 })
 
 
